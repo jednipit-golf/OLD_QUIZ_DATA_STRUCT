@@ -1,68 +1,61 @@
 #include <iostream>
 #include <vector>
 #include <set>
-#include <utility>  
 #include <algorithm>
-#include <array>
-#include <map>
 
 using namespace std;
-int main(){
+
+int main() {
     ios_base::sync_with_stdio(false); cin.tie(0); 
-    int n,m,c;
-    vector<int> vec1,vec2,ans;
+
+    int n, m, c;
     cin >> n >> m;
-    for (auto i =0;i < n;i++){
+
+    vector<int> vec1(n), vec2(m), ans;
+    set<int> set1;
+
+    for (int i = 0; i < n; ++i) {
         cin >> c;
-        vec1.push_back(c);
+        vec1[i] = c;
+        set1.insert(c);
     }
-    set<int> set1(vec1.begin(),vec1.end());
-    for (auto i =0;i < m;i++){
+
+    for (int i = 0; i < m; ++i) {
         cin >> c;
-        vec2.push_back(c);
+        vec2[i] = c;
     }
-    auto bb = set1.begin();
-    auto ee = set1.end();
-    ee--;
-    for(auto x:vec2){
-        if (set1.find(x) != set1.end()){
-            ans.push_back(x);              //เจอ            
-        }else if (x > *ee ){               
-            ans.push_back(*ee);            //เอาตัวเกินออก
-        }else if (x < *bb){                             
-            ans.push_back(*bb);            //เอาตัวเล็กออก 
-        }else{
-            for (auto y:set1){
-                if (x < y){
-                    auto it1 = set1.find(y);
-                    auto it2 = it1;
-                    it1--;
-                    int k1 = abs(x- * it1);
-                    int k2 = abs(*it2 - x);
-                    if (k1 == k2){
-                        ans.push_back(*it2);
-                        break;
-                    }else if(k1 < k2){
-                        ans.push_back(*it1);
-                        break;
-                    }else if (k1 > k2){
-                        ans.push_back(*it2);
-                        break;
-                    }
-                }
+
+    // Reserve space for the answer vector
+    ans.reserve(m);
+
+    for (int x : vec2) {
+        auto it = set1.lower_bound(x);
+
+        if (it != set1.end() && it != set1.begin()) {
+            auto it1 = it;
+            auto it2 = prev(it);
+
+            int dist1 = abs(*it1 - x);
+            int dist2 = abs(*it2 - x);
+
+            if (dist1 < dist2) {
+                ans.push_back(*it1);
+            } else if (dist2 < dist1) {
+                ans.push_back(*it2);
+            } else {
+                ans.push_back(*it1); // or *it2, both are equally valid
             }
+        } else if (it == set1.end()) {
+            ans.push_back(*prev(it));
+        } else {
+            ans.push_back(*it);
         }
     }
-    for(auto x:ans){
+
+    for (int x : ans) {
         cout << x << " ";
     }
     cout << endl;
+
+    return 0;
 }
-        
-
-
-
-
-
-
-        
