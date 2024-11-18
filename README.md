@@ -1,1 +1,1 @@
-                                                                                      OLD QUIZ GRADER FROM DATA STRUCTURE
+OLD QUIZ GRADER FROM DATA STRUCTURE
